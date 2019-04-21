@@ -1,6 +1,7 @@
 
 [objectActualLocation_x,objectActualLocation_y,Y,K] = SensorData();
-
+t_start = 7009129 % enter start value here, generall in microsecs
+t_end = 7206967 % a random t_end value
 %Initial conditions
 x_0 = objectActualLocation_x(1,1);
 y_0 = objectActualLocation_y(1,1);
@@ -22,7 +23,7 @@ Ts = 0.01; %10 Hz
 %EKF
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
 
-for k=2:K
+for k=t_start:K
     y = Y(:,k);
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
