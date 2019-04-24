@@ -1,21 +1,40 @@
-function [cur_data_vec, new_previndex_vec] = ethsense(cur_time, previndex_vec)
+function [cur_data_vec, new_previndex_vec_] = ethsense(cur_time, previndex_vec, rawaccel, rawgps, rawgyro)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 % onboardgps = matfile('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\onboardgps.mat')
-rawaccel = matfile('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\rawaccel.mat');
-found1 = find(rawaccel.RawAccel(previndex_vec(2):size(rawaccel.RawAccel,1),1) == int64(cur_time));
-new_previndex_vec = previndex_vec;
-[m1,n1] = size(found1);
-if(m1 == 1)
-    disp(cur_time)
-    disp('found accel');
-    dvaccel = [rawaccel.RawAccel(found1(1),2:4)];
-    new_previndex_vec(2) = found1(1);
-else
-    disp(cur_time)
-    disp('going with last accel');
-    dvaccel = [rawaccel.RawAccel(previndex_vec(2),2:4)];
-end
-cur_data_vec = dvaccel;
+%     disp(previndex_vec(2))
+%     rawaccel = matfile('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\rawaccel.mat');
+%   FIND THE STUFF HERE!
+    [m_accel,n_accel,v] = find(rawaccel(:,1) == int64(cur_time));
+    [m_gps,n_gps] = find(rawgps(:,1) >= int64(cur_time));
+    [m_gyro,n_gyro] = find(rawgyro(:,1) >= int64(cur_time));
+%   IF FOUND, do stuff...     
+    new_previndex_vec_ = previndex_vec;
+    
+%     [m_accel,n_accel] = size(found_accel);
+%     [m_gps,n_gps] = size(found_gps)
+%     [m_gyro,n_gyro] = size(found_gyro);
+%     disp('m_accel, m_gps, m_gyro');
+%     disp([m_accel, m_gps, m_gyro]);
+    if(size(m_accel,1) > 0)
+        dvaccel = rawaccel(m_accel(1),2:4);
+        new_previndex_vec_(2) = m_accel(1);
+    else
+        disp('i shouldn"t be here');
+        dvaccel = [rawaccel(prev_index(2),2:4)];
+    end
+    if(size(m_gps,1) > 0)
+        dvgps = [rawgps(m_gps(1),2:4)];
+        new_previndex_vec_(1) = m_gps(1);
+    else
+        dvgps = [rawgps(prev_index(1),2:4)];
+    end
+    if(size(m_gyro,1) > 0)
+        dvgyro = [rawgyro(m_gyro(1),2:4)];
+        new_previndex_vec_(3) = m_gyro(1);
+    else
+        dvgyro = [rawgyro(prev_index(3),2:4)];
+    end
+    cur_data_vec = [dvgps, dvaccel, dvgyro];
+%     disp(new_previndex_vec_);
 return
-% cur_data_vec, previndex_vec

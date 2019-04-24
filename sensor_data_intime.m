@@ -86,22 +86,36 @@ else
     end
 end
 %%
+clc;
+tic
 cur_time = rawaccel.RawAccel(:,1);
+toc
+%%
+clc; clear all;
+load('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\rawaccel.mat')
+tic
+cur_time = RawAccel(:,1);
+rawaccel = RawAccel;
+rawgps = RawAccel;
+rawgyro = RawAccel;
+toc
+%%
+clc;
 previndex_vec = [1,1,1]
 tic
-for i = cur_time
-    disp(i)
-    [cur_data_vec, new_previndex_vec] = ethsense(i, previndex_vec)
-    if(previndex_vec(2) ~= new_previndex_vec(2))
-        disp('how did i get here?')
-        disp('i'); disp(i);
-        disp('current data:');
-        disp(cur_data_vec);
-        disp('previndex_vec');
-        disp(previndex_vec);
-        previndex_old = previndex_vec
+for i = cur_time'
+%     disp(i)
+    [cur_data_vec, new_previndex_vec] = ethsense(i, previndex_vec, rawaccel, rawgps, rawgyro);
+%     disp('cur_data_vec'); disp(cur_data_vec);
+%     disp('new_previndex_vec'); disp(new_previndex_vec);
+%     disp(isequal(previndex_vec,new_previndex_vec));
+    if(~isequal(previndex_vec,new_previndex_vec))
+%         disp('current data:');
+%         disp(cur_data_vec);
+%         disp(new_previndex_vec);
+        previndex_vec = new_previndex_vec;
     else
-    end
-    
+        previndex_vec = new_previndex_vec;
+    end 
 end
 toc

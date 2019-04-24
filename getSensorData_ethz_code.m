@@ -3,7 +3,7 @@ clear all; clc; close all;
 % load GPS data
 load('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\onboardgps.mat')
 % load IMU data
-load('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\onboardgps.mat')
+load('\\client\c$\Users\KJR03\AE598\ae598\AGZ_subset\Log_Files\rawaccel.mat')
 % load Ground Truth data (?)
 
 %% Clear again
