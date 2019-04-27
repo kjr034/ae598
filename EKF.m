@@ -13,7 +13,7 @@
 % t_start = 7009129 % enter start value here, generall in microsecs
 % t_end = 7206967 % a random t_end value
 %Initial conditions
-
+'/home/johnkan2/ae598/final_proj/'
 x_0 = objectActualLocation_x(1,1);
 y_0 = objectActualLocation_y(1,1);
 V_x_0 = 0;
@@ -26,7 +26,7 @@ omega_0 =0;
 x = zeros(8,K);
 KK
 x_east(:,1) = [x_0,V_x_0,a_x_0]';
-x_north(:,1) = [y_0,V_y_0,a_y_0]';
+x_north(:,1) = [y_0,V_y_0,a_y_0]';your_working_directory = '/home/johnkan2/ae598/final_proj'
 x(:,1) = [x_east(:,1); x_north(:,1);psi_0;omega_0];
 Ts = 0.01; %10 Hz
 
@@ -35,7 +35,7 @@ Ts = 0.01; %10 Hz
 % Essentially: 
 % obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
-
+your_working_directory = '/home/johnkan2/ae598/final_proj'
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
 for k =t_start:K
@@ -56,7 +56,7 @@ function x_k = stateTransitionFunc(x_k_minus_1)
          0 0 0  0     1           0 0 0;...
          0 0 0  0     0           1 0 0;...
          0 0 0  0     0           0 1 Ts;...
-         0 0 0  0     0           0 0 1];
+         0 0 0  0     0           0your_working_directory = '/home/johnkan2/ae598/final_proj' 0 1];
     x_k = A*x_k_minus_1;
 end
 
