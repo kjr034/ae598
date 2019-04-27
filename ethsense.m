@@ -24,10 +24,12 @@ function [cur_data_vec, new_previndex_vec_] = ethsense(cur_time, previndex_vec, 
         dvaccel = [rawaccel(prev_index(2),2:4)];
     end
     if(size(m_gps,1) > 0)
-        dvgps = [rawgps(m_gps(1),2:4)];
+        dvgps = rawgps(m_gps(1),3:4);
+%         dvgps = [rawgps(m_gps(1),3:4)',rawgps(m_gps(1),6:8)'];
         new_previndex_vec_(1) = m_gps(1);
     else
-        dvgps = [rawgps(prev_index(1),2:4)];
+        dvgps = rawgps(prev_index(1),3:4);
+%         dvgps = [rawgps(prev_index(1),3:4)',rawgps(prev_index(1),6:8)'];
     end
     if(size(m_gyro,1) > 0)
         dvgyro = [rawgyro(m_gyro(1),2:4)];
