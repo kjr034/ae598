@@ -1,6 +1,3 @@
-
-[objectActualLocation_x,objectActualLocation_y,Y,K] = SensorData();
-
 % Note: Y is generated via the function SensorData(). Because we can
 % essentially go through this section of the data with this one function,
 % we'll be preprocessing the data within SensorData(). Note also that the
@@ -9,11 +6,14 @@
 % current dataset shoulud be about 1 minute. If the data takes longer than
 % this to load, kill the program.
 
+[objectActualLocation_x,objectActualLocation_y,Y,K] = SensorData();
+
+
+
 % 
 % t_start = 7009129 % enter start value here, generall in microsecs
 % t_end = 7206967 % a random t_end value
 %Initial conditions
-'/home/johnkan2/ae598/final_proj/'
 x_0 = objectActualLocation_x(1,1);
 y_0 = objectActualLocation_y(1,1);
 V_x_0 = 0;
@@ -24,9 +24,8 @@ psi_0 = 0;
 omega_0 =0;
 
 x = zeros(8,K);
-KK
 x_east(:,1) = [x_0,V_x_0,a_x_0]';
-x_north(:,1) = [y_0,V_y_0,a_y_0]';your_working_directory = '/home/johnkan2/ae598/final_proj'
+x_north(:,1) = [y_0,V_y_0,a_y_0]';
 x(:,1) = [x_east(:,1); x_north(:,1);psi_0;omega_0];
 Ts = 0.01; %10 Hz
 
@@ -35,7 +34,6 @@ Ts = 0.01; %10 Hz
 % Essentially: 
 % obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
-your_working_directory = '/home/johnkan2/ae598/final_proj'
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
 for k =t_start:K
@@ -49,14 +47,14 @@ plot(objectActualLocation_x,objectActualLocation_y,x(1,:),x(2,:))
 
 function x_k = stateTransitionFunc(x_k_minus_1)
     Ts = 0.01; %10 Hz
-    A = [1 0 Ts 0  0.5*Ts^2       0 0 0;...
-         0 1 0  Ts    0       0.5*Ts^2 0 0;...
-         0 0 1  0     Ts          0 0 0;...
-         0 0 0  1     0           Ts 0 0;...
-         0 0 0  0     1           0 0 0;...
-         0 0 0  0     0           1 0 0;...
-         0 0 0  0     0           0 1 Ts;...
-         0 0 0  0     0           0your_working_directory = '/home/johnkan2/ae598/final_proj' 0 1];
+    A = [1 0 Ts 0  0.5*Ts^2       0 0 0; ...
+         0 1 0  Ts    0       0.5*Ts^2 0 0; ...
+         0 0 1  0     Ts          0 0 0; ...
+         0 0 0  1     0           Ts 0 0; ...
+         0 0 0  0     1           0 0 0; ...
+         0 0 0  0     0           1 0 0; ...
+         0 0 0  0     0           0 1 Ts; ...
+         0 0 0  0     0           0 0 1];
     x_k = A*x_k_minus_1;
 end
 
@@ -73,15 +71,15 @@ function y_k = measurementFcn(x_k)
     DCM = [cos(psi) -sin(psi);
            sin(psi) cos(psi)];
     a_body = DCM*[x_k(5);x_k(6)];
-    y_k(8) = a_body(1); %a_x_body
-    y_k(9) = a_body(2); %a_y_body
-    y_k(7) = x_k(8); %omega_z_body
+    y_k(6) = a_body(1); %a_x_body
+    y_k(7) = a_body(2); %a_y_body
+    y_k(5) = x_k(8); %omega_z_body
     
-    lla = flat2lla( [ x_k(1) x_k(2) 0 ], [0 45], 5, -100);
-
-    [xyz, h, dec, dip, f] = wrldmagm(0, lla(1), lla(2) , decyear(2019,4,7));
-    y_k(5) = xyz(1); %magx
-    y_k(6) = xyz(2); %magy
+%     lla = flat2lla( [ x_k(1) x_k(2) 0 ], [0 45], 5, -100);
+% 
+%     [xyz, h, dec, dip, f] = wrldmagm(0, lla(1), lla(2) , decyear(2019,4,7));
+%     y_k(8) = xyz(1); %magx
+%     y_k(9) = xyz(2); %magy
 end
 
 

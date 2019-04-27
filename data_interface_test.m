@@ -2,10 +2,10 @@ clc; clear all;
 
 % On Linux subsystem:
 
-your_working_directory = % FILL THIS IN
-accel_location = % FILL THIS IN
-gps_location = % FILL THIS IN
-gyro_location = % FILL THIS IN
+your_working_directory = '\\client\c$\Users\KJR03\AE598\ae598\' % FILL THIS IN
+accel_location = 'AGZ_subset\Log_Files\rawaccel.mat' % FILL THIS IN
+gps_location = 'AGZ_subset\Log_Files\rawgyro.mat'% FILL THIS IN
+gyro_location = 'AGZ_subset\Log_Files\onboardgps.mat'% FILL THIS IN
 
 load(strcat(your_working_directory,accel_location));
 load(strcat(your_working_directory,gyro_location));
