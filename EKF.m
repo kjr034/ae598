@@ -1,8 +1,19 @@
 
 [objectActualLocation_x,objectActualLocation_y,Y,K] = SensorData();
-t_start = 7009129 % enter start value here, generall in microsecs
-t_end = 7206967 % a random t_end value
+
+% Note: Y is generated via the function SensorData(). Because we can
+% essentially go through this section of the data with this one function,
+% we'll be preprocessing the data within SensorData(). Note also that the
+% overall actual locations (objectActualLocation_x,_y) willl be found via
+% the "GroundTruth" dataset given by ETHZ. The dataprocessing for the
+% current dataset shoulud be about 1 minute. If the data takes longer than
+% this to load, kill the program.
+
+% 
+% t_start = 7009129 % enter start value here, generall in microsecs
+% t_end = 7206967 % a random t_end value
 %Initial conditions
+
 x_0 = objectActualLocation_x(1,1);
 y_0 = objectActualLocation_y(1,1);
 V_x_0 = 0;
@@ -13,7 +24,7 @@ psi_0 = 0;
 omega_0 =0;
 
 x = zeros(8,K);
-
+KK
 x_east(:,1) = [x_0,V_x_0,a_x_0]';
 x_north(:,1) = [y_0,V_y_0,a_y_0]';
 x(:,1) = [x_east(:,1); x_north(:,1);psi_0;omega_0];
@@ -21,9 +32,13 @@ Ts = 0.01; %10 Hz
 
 
 %EKF
+% Essentially: 
+% obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
 
-for k=t_start:K
+% for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
+% microseconds
+for k =t_start:K
     y = Y(:,k);
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
@@ -73,7 +88,11 @@ end
 
 %{
 
-function y_k = measurementFcn(x_k)
+function y_k = measuremPS Measurements
+    x_k(1) = LongGpsE; %x
+    x_k(2) = LatGpsN; %y
+    x_k(3) = VelNedE; %Vx
+    x_k(4) = VelNedN; %VyentFcn(x_k)
     syms y_sym;
     y_k = solve(h_inverse(y_sym)-x_k,y_sym);
     y_k = double(y_k);
@@ -107,7 +126,8 @@ end
 
 function [yaw,Rh] = Algorithm1_2(magx,magy,gyro_z,Rh)
     mnorm = norm([magx magy]); % mx(k) my(k) from magnetometer
-    mx = magx/mnorm; my =magy/mnorm;
+    mx = magx/mnorm; my =mag    y_k(4) = x_k(4); %VelNedN
+y/mnorm;
     psi = atan2(-my,mx);
     DCM = [cos(psi) -sin(psi);
            sin(psi) cos(psi)];
@@ -120,7 +140,8 @@ function [yaw,Rh] = Algorithm1_2(magx,magy,gyro_z,Rh)
     nOM = norm(OM); %For exact solution
     A = eye(2) - OM.*sin(nOM*Ts)./nOM + (OM^2).*(1-cos(nOM*Ts))/nOM^2;
     Rh = Rh*A';
-    yaw = 180/pi*atan2(Rh(2,1),Rh(1,1)); %yaw, Complementary Filter
+    yaw = 180/pi*atan2(Rh(2,    y_k(4) = x_k(4); %VelNedN
+1),Rh(1,1)); %yaw, Complementary Filter
     %}
     yaw = YAW;
     Rh = DCM;

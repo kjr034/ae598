@@ -32,10 +32,10 @@ function [cur_data_vec, new_previndex_vec_] = ethsense(cur_time, previndex_vec, 
 %         dvgps = [rawgps(prev_index(1),3:4)',rawgps(prev_index(1),6:8)'];
     end
     if(size(m_gyro,1) > 0)
-        dvgyro = [rawgyro(m_gyro(1),2:4)];
+        dvgyro = [rawgyro(m_gyro(1),3:5)];
         new_previndex_vec_(3) = m_gyro(1);
     else
-        dvgyro = [rawgyro(prev_index(3),2:4)];
+        dvgyro = [rawgyro(prev_index(3),3:5)];
     end
     cur_data_vec = [dvgps, dvaccel, dvgyro];
 %     disp(new_previndex_vec_);
