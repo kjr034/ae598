@@ -1,4 +1,4 @@
-% Note: Y is generated via the function SensorData(). Because we can
+% Note: Y is gener ated via the function SensorData(). Because we can
 % essentially go through this section of the data with this one function,
 % we'll be preprocessing the data within SensorData(). Note also that the
 % overall actual locations (objectActualLocation_x,_y) willl be found via
@@ -6,11 +6,10 @@
 % current dataset shoulud be about 1 minute. If the data takes longer than
 % this to load, kill the program.
 
-[objectActualLocation_x,objectActualLocation_y,Y,K] = SensorData();
+[objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData();
 
-
-
-% 
+%%
+t_start = 1
 % t_start = 7009129 % enter start value here, generall in microsecs
 % t_end = 7206967 % a random t_end value
 %Initial conditions
@@ -37,13 +36,13 @@ obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
 for k =t_start:K
-    y = Y(:,k);
+    y = Y(k,:);
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
     x(:,k) = obj.State(:,1);
 end
 
-plot(objectActualLocation_x,objectActualLocation_y,x(1,:),x(2,:))
+plot(x(1,:),x(2,:))
 
 function x_k = stateTransitionFunc(x_k_minus_1)
     Ts = 0.01; %10 Hz

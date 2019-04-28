@@ -19,22 +19,13 @@ rawgyro = RawGyro;
 clc;
 previndex_vec = [1,1,1]
 tic
-final_data_vec = zeros(27048,8);
+final_data_vec = zeros(27048,7);
 n = 1
 for i = cur_time'
-    disp(i)
+%     disp(i)
     [final_data_vec(n,:), new_previndex_vec] = ethsense(i, previndex_vec, rawaccel, rawgps, rawgyro);
-%     disp('cur_data_vec'); disp(cur_data_vec);
-    
-%     disp('new_previndex_vec'); disp(new_previndex_vec);
-%     disp(isequal(previndex_vec,new_previndex_vec));\
-    disp(rawgps(previndex_vec(1),1))
-    disp(rawaccel(previndex_vec(2),1))
-    disp(rawgyro(previndex_vec(3),1))
+
     if(~isequal(previndex_vec,new_previndex_vec))
-        disp('current data:');
-        disp(final_data_vec(n,:));
-        disp(new_previndex_vec);
         previndex_vec = new_previndex_vec;
     else
         previndex_vec = new_previndex_vec;
