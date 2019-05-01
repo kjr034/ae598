@@ -1,5 +1,5 @@
 clc; clear all;
-
+N = 27
 % On Linux subsystem:
 
 your_working_directory = '\\client\c$\Users\KJR03\AE598\ae598\' % FILL THIS IN
