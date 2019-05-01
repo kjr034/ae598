@@ -1,4 +1,4 @@
-function [final_data_vec] = meas_vec(working_directory, gps_location, accel_location, gyro_location)
+function [final_data_vec] = meas_vec(N,working_directory, gps_location, accel_location, gyro_location)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 clc;
@@ -9,8 +9,9 @@ your_working_directory = working_directory
 load(strcat(your_working_directory,accel_location));
 load(strcat(your_working_directory,gyro_location));
 load(strcat(your_working_directory,gps_location));
+% load(strcat(your_working_directory,pos_gt))
 % setting current time
-cur_time = RawAccel(:,1);
+cur_time = RawAccel(1:N,1);
 % setting variable namesyour_working_directory = '/home/johnkan2/ae598/final_proj'
 rawaccel = RawAccel;
 rawgps = OnboardGPS;
@@ -19,7 +20,7 @@ rawgyro = RawGyro;
 clc;
 previndex_vec = [1,1,1]
 tic
-final_data_vec = zeros(27048,7);
+final_data_vec = zeros(N,7);
 n = 1
 for i = cur_time'
 %     disp(i)

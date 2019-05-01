@@ -5,16 +5,20 @@
 % the "GroundTruth" dataset given by ETHZ. The dataprocessing for the
 % current dataset shoulud be about 1 minute. If the data takes longer than
 % this to load, kill the program.
+clear all;
+N = 27000
+[objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData(N);
 
-[objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData();
+%%
+f = 32
+[x_input,y_input,f]=ll2utm([Y(:,2),Y(:,1)])
+% lla_output = lla2flat([Y(:,1:2) zeros(size(Y(:,1)))], [0 32], -5, 100)
 
 %%
 t_start = 1
-% t_start = 7009129 % enter start value here, generall in microsecs
-% t_end = 7206967 % a random t_end value
 %Initial conditions
-x_0 = objectActualLocation_x(1,1);
-y_0 = objectActualLocation_y(1,1);
+x_0 = x_input(1);
+y_0 = y_input(2);
 V_x_0 = 0;
 V_y_0 = 0;
 a_x_0 = 0;
@@ -33,19 +37,21 @@ Ts = 0.01; %10 Hz
 % Essentially: 
 % obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
+obj.MeasurementNoise = diag([10; 10; 1; 1; 1; 1; 1])
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
+tic
 for k =t_start:K
-    y = Y(k,:);
+    y = [x_input(k,1)-x_input(1,1) y_input(k,1)-y_input(1,1) Y(k,3:7)]'; % this needs to be changed to [x_input(k,1) y_input(k,1) ...]
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
     x(:,k) = obj.State(:,1);
 end
+toc
 
-plot(x(1,:),x(2,:))
 
 function x_k = stateTransitionFunc(x_k_minus_1)
-    Ts = 0.01; %10 Hz
+    Ts = 0.1; %10 Hz
     A = [1 0 Ts 0  0.5*Ts^2       0 0 0; ...
          0 1 0  Ts    0       0.5*Ts^2 0 0; ...
          0 0 1  0     Ts          0 0 0; ...
@@ -60,6 +66,7 @@ end
 function y_k = measurementFcn(x_k)
     
     %GPS
+%     lla = lla2flat([ x_k(1) x_k(2) 0 ], [0 32], 5, -100);
     y_k(1) = x_k(1); %LongGpsE
     y_k(2) = x_k(2); %LatGpsN
     y_k(3) = x_k(3); %VelNedE
@@ -83,6 +90,7 @@ end
 
 
 
+%%
 %{
 
 function y_k = measuremPS Measurements
