@@ -22,8 +22,8 @@ previndex_vec = [1,1,1]
 tic
 final_data_vec = zeros(N,7);
 n = 1
-for i = cur_time'
-%     disp(i)
+for i = cur_time(n)
+    disp('here rn')
     [final_data_vec(n,:), new_previndex_vec] = ethsense(i, previndex_vec, rawaccel, rawgps, rawgyro);
 
     if(~isequal(previndex_vec,new_previndex_vec))

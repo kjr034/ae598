@@ -21,12 +21,12 @@ hold on
 title('Normalized Position Tracking via EKF and UKF');
 xlabel('X [m]')
 ylabel('Y [m]')
-% plot(x_input(:,1)-x_input(1,1),y_input(:,1)-y_input(1,1),'-o');
+scatter(x_input(10000:12048,1)-x_input(1,1),y_input(10000:12048,1)-y_input(1,1),'x');
 % scatter(x(1,1:27000), x(2,1:27000),'x','r');
-% scatter(x_ekf(1,1:25000), x_ekf(2,1:25000),'o','b');
-scatter(x_gt-x_gt(1),y_gt-y_gt(1));
-scatter(x_ukf(1,1:25000),x_ukf(2,1:25000),'.');
-scatter(x_gps-x_gps(1), y_gps-y_gps(1),'x','g');
+scatter(x_ekf(1,10000:12048), x_ekf(2,10000:12048),'o','b');
+% scatter(x_gt-x_gt(1),y_gt-y_gt(1));
+% scatter(x_ukf(1,1:25000),x_ukf(2,1:25000),'.');
+% scatter(x_gps-x_gps(1), y_gps-y_gps(1),'x','g');
 legend('EKF','UKF','GPS Measurement');
 % scatter(gps_vec(:,1)-x_gt(1), gps_vec(:,2)-x_gt(2),'x')
 

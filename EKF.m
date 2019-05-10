@@ -6,12 +6,13 @@
 % current dataset shoulud be about 1 minute. If the data takes longer than
 % this to load, kill the program.
 clear all;
-N = 27000
-[objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData(N);
-
+N = 12048
+% [objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData(N);
+[objectActualLocation_x,objectActualLocation_y,Y,K] = getSensorData2(N);
 %%
 f = 32
-[x_input,y_input,f]=ll2utm([Y(:,2),Y(:,1)])
+[x_input,y_input,f]=ll2utm([Y(:,1),Y(:,2)]) % for MPsense
+% [x_input,y_input,f]=ll2utm([Y(:,2),Y(:,1)]) % for ethsense
 % lla_output = lla2flat([Y(:,1:2) zeros(size(Y(:,1)))], [0 32], -5, 100)
 
 %%
@@ -38,11 +39,11 @@ x_ekf(:,1) = [x_0, y_0, V_x_0, V_y_0, a_x_0, a_y_0, psi_0, omega_0]';
 % Essentially: 
 % obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
-obj.MeasurementNoise = diag([0.1; 0.1; 0.1; 0.1; 10; 10; 010]);
+obj.MeasurementNoise = diag([1; 1; 1; 1; 1; 1; 01]);
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
 tic
-for k =t_start:25000
+for k =t_start:12048
     y = [x_input(k,1)-x_input(1,1) y_input(k,1)-y_input(1,1) Y(k,3:7)]'; % this needs to be changed to [x_input(k,1) y_input(k,1) ...]
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
