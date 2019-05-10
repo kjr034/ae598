@@ -11,7 +11,7 @@ obj_ukf = unscentedKalmanFilter(@stateTransitionFunc,@measurementFcn,x_ukf(:,1))
 %%
 t_start = 1
 tic
-for k =t_start:K
+for k =t_start:25000
     y_ukf = [x_input(k,1)-x_input(1,1) y_input(k,1)-y_input(1,1) Y(k,3:7)]';
     [CorrectedState,CorrectedStateCovariance] = correct(obj_ukf,y_ukf);
     [PredictedState,PredictedStateCovariance] = predict(obj_ukf);
