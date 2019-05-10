@@ -18,21 +18,21 @@ clc
 close all;
 figure();
 hold on
-title('Normalized Position Tracking via EKF and UKF');
+title('Normalized Position Tracking via EKF and UKF for Real Data');
 xlabel('X [m]')
 ylabel('Y [m]')
-scatter(x_input(10000:12048,1)-x_input(1,1),y_input(10000:12048,1)-y_input(1,1),'x');
+scatter(x_input(11400:12048,1)-x_input(11400,1),y_input(11400:12048,1)-y_input(11400,1),'x');
 % scatter(x(1,1:27000), x(2,1:27000),'x','r');
-scatter(x_ekf(1,10000:12048), x_ekf(2,10000:12048),'o','b');
+plot(x_ekf(1,11400:12048)-x_ekf(1,11400), x_ekf(2,11400:12048)-x_ekf(2,11400));
 % scatter(x_gt-x_gt(1),y_gt-y_gt(1));
-% scatter(x_ukf(1,1:25000),x_ukf(2,1:25000),'.');
+plot(x_ukf(1,11400:12048)-x_ukf(1,11400),x_ukf(2,11400:12048)-x_ukf(2,11400));
 % scatter(x_gps-x_gps(1), y_gps-y_gps(1),'x','g');
-legend('EKF','UKF','GPS Measurement');
+legend('GPS Measurement','EKF','UKF');
 % scatter(gps_vec(:,1)-x_gt(1), gps_vec(:,2)-x_gt(2),'x')
 
 hold off
 
-saveas(gcf,'path_plot_final.png')
+saveas(gcf,'path_plot_final_real_data.png')
 %%
 clc
 close all;

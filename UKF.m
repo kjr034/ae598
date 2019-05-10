@@ -11,7 +11,7 @@ obj_ukf.MeasurementNoise = diag([100; 100; 10; 1; 0.10; 0.10; 1]);
 %%
 t_start = 1
 tic
-for k =t_start:25000
+for k =t_start:12048
     y_ukf = [x_input(k,1)-x_input(1,1) y_input(k,1)-y_input(1,1) Y(k,3:7)]';
     [CorrectedState,CorrectedStateCovariance] = correct(obj_ukf,y_ukf);
     [PredictedState,PredictedStateCovariance] = predict(obj_ukf);
