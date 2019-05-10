@@ -6,7 +6,7 @@ clc;
 x_ukf = zeros(8,K);
 x_ukf(:,1) = x(:,1);
 obj_ukf = unscentedKalmanFilter(@stateTransitionFunc,@measurementFcn,x_ukf(:,1));
-
+obj_ukf.MeasurementNoise = diag([100; 100; 10; 1; 0.10; 0.10; 1]);
 
 %%
 t_start = 1
