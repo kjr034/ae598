@@ -17,35 +17,36 @@ f = 32
 %%
 t_start = 1
 %Initial conditions
-x_0 = x_input(1);
-y_0 = y_input(2);
+x_0 = 0;
+y_0 = 0;
 V_x_0 = 0;
 V_y_0 = 0;
 a_x_0 = 0;
-a_y_0 = 0;
+a_y_0 = 0;  
 psi_0 = 0;
 omega_0 =0;
 
 x = zeros(8,K);
 x_east(:,1) = [x_0,V_x_0,a_x_0]';
 x_north(:,1) = [y_0,V_y_0,a_y_0]';
-x(:,1) = [x_east(:,1); x_north(:,1);psi_0;omega_0];
-Ts = 0.01; %10 Hz
+% x(:,1) = [x_east(:,1); x_north(:,1);psi_0;omega_0];
+x_ekf(:,1) = [x_0, y_0, V_x_0, V_y_0, a_x_0, a_y_0, psi_0, omega_0]';
+% Ts = 0.01; %10 Hz
 
 
 %EKF
 % Essentially: 
 % obj = extendedKalmanFilter(x_k, y_k, x_init);
 obj = extendedKalmanFilter(@stateTransitionFunc,@measurementFcn,x(:,1));
-obj.MeasurementNoise = diag([10; 10; 1; 1; 1; 1; 1])
+obj.MeasurementNoise = diag([0.1; 0.1; 0.1; 0.1; 10; 10; 010]);
 % for the ETH dataset, the t_start = RawAccel(1,1) --> this is in
 % microseconds
 tic
-for k =t_start:K
+for k =t_start:25000
     y = [x_input(k,1)-x_input(1,1) y_input(k,1)-y_input(1,1) Y(k,3:7)]'; % this needs to be changed to [x_input(k,1) y_input(k,1) ...]
     [CorrectedState,CorrectedStateCovariance] = correct(obj,y);
     [PredictedState,PredictedStateCovariance] = predict(obj);
-    x(:,k) = obj.State(:,1);
+    x_ekf(:,k) = obj.State(:,1);
 end
 toc
 
