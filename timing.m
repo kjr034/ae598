@@ -13,10 +13,11 @@ ylabel('Time Elapsed (s)');
 saveas(gcf,'ekf_num_points_mean_time.png');
 % Time for one point
 figure();
-title('EKF:Number of Points versus Time Elapsed for Each Point');
 scatter(num_points_vec, ekf_mean_time_vec./num_points_vec/(10^(-3)))
 xlabel('Number of Points');
 ylabel('Time Elapsed [ms]');
+title('EKF:Number of Points versus Time Elapsed for Each Point');
+
 saveas(gcf,'ekf_num_points_single_op_time.png');
 average_time_per_point = mean(ekf_mean_time_vec./num_points_vec/(10^(-3)));
 %% UKF

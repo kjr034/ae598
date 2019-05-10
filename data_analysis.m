@@ -39,9 +39,51 @@ ukf_check_y = (x_ukf(2,1:27000)' - (y_input(1:27000,1)-y_input(1,1)));
 ukf_RMS_pos_y =(norm(ukf_check_y,'fro')/sqrt(27000));
 ekf_check_y = (x(2,1:27000)' - (y_input(1:27000,1)-y_input(1,1)));
 ekf_RMS_pos_y =(norm(ekf_check_y,'fro')/sqrt(27000));
+ekf_RMS_pos_y_vec = ekf_check_y.^(0.5)
+ukf_RMS_pos_y_vec = ukf_check_y.^0.5
 saveas(gcf,'velocity_tracking_with_time.png')
 disp(ukf_RMS_pos_y)
 disp(ekf_RMS_pos_y)
+%%
+close all;
+figure()
+XMIN = 7E+6
+XMAX = 1E+7
+YMIN = -1
+YMAX = 550
+hold on
+scatter(RawAccel(1:27000,1),ekf_RMS_pos_y_vec)
+scatter(RawAccel(1:27000,1),ukf_RMS_pos_y_vec)
+legend('EKF','UKF');
+axis([XMIN XMAX YMIN YMAX])
+title('MMSE for EKF and UKF as Compared with the Input');
+xlabel('Time [s]')
+ylabel('X Position [m]');
+hold off
+saveas(gcf,'convergence_error_nstuff.png')
+
+%%
+ukf_check_ygt = (x_ukf(2,1:27000)' - (y_gt(1:27000,1)-y_gt(1,1)));
+ukf_RMS_pos_ygt =(norm(ukf_check_ygt,'fro')/sqrt(27000));
+ekf_check_ygt = (x(2,1:27000)' - (y_gt(1:27000,1)-y_gt(1,1)));
+ekf_RMS_pos_ygt =(norm(ekf_check_ygt,'fro')/sqrt(27000));
+ekf_RMS_pos_y_vecgt = ekf_check_ygt.^(0.5)
+ukf_RMS_pos_y_vecgt = ukf_check_ygt.^0.5
+figure()
+% XMIN = 7E+6
+% XMAX = 1E+7
+% YMIN = -1
+% YMAX = 550
+hold on
+scatter(RawAccel(1:27000,1),ekf_RMS_pos_y_vec)
+scatter(RawAccel(1:27000,1),ukf_RMS_pos_y_vec)
+legend('EKF','UKF');
+% axis([XMIN XMAX YMIN YMAX])
+title('MMSE for EKF and UKF as Compared with the Input');
+xlabel('Time [s]')
+ylabel('X Position [m]');
+hold off
+saveas(gcf,'convergence_error_nstuff.png')
 %% GPS
 
 close all;
